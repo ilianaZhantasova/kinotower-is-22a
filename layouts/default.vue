@@ -8,9 +8,12 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-    <div>
-        <button class="btn btn-outline-success me-2" type="button">Sign in</button>
-        <button class="btn btn-outline-primary" type="button">Sign out</button>
+    <div v-if="!authStore.authData">
+        <button @click="$router.push('/signin')" class="btn btn-outline-success me-2" type="button">Sign in</button>
+        <button @click="$router.push('/signup')" class="btn btn-outline-primary" type="button">Sign up</button>
+     </div>
+     <div v-else>
+      <button class="btn btn-outline-danger me-2" type="button">Sign out</button>
      </div>
     </div>
   </div>
@@ -31,6 +34,7 @@
 </template>
 
 <script lang="ts" setup>
+const authStore = useAuthStore();
 </script>
 
 <style>

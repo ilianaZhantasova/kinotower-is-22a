@@ -2,7 +2,21 @@
 const filmsStore = useFilmsStore();
 const categoriesStore = useCategoriesStore();
 const countriesStore = useCountriesStore();
+const category = ref(null);
+const country = ref(null);
+const sortBy = ref('name');
 
+watch(category, (newCategory) => {
+  filmsStore.addCategoryToParams(newCategory);
+});
+
+watch(country, (newCountry) => {
+  filmsStore.addCountryToParams(newCountry);
+});
+
+watch(sortBy, (newSortBy) => {
+  filmsStore.addSortToParams(newSortBy);
+});
 filmsStore.fetchFilms();
 </script>
 
@@ -10,7 +24,7 @@ filmsStore.fetchFilms();
 <template>
   <div class="row">
   <div class="col-md-4">
-<select class="form-select">
+<select class="form-select" v-model="category">
   <option selected :value="null">Select genre...</option>
   <option v-for="category in categoriesStore.categories"
   :key="category.id"
@@ -18,7 +32,7 @@ filmsStore.fetchFilms();
 </select>
   </div>
   <div class="col-md-4">
-<select class="form-select">
+<select class="form-select" v-model="country">
   <option selected :value="null">Select country...</option>
   <option v-for="country in countriesStore.countries"
   :key="country.id"
@@ -26,14 +40,14 @@ filmsStore.fetchFilms();
 </select>
   </div>
   <div class="col-md-3">
-<select class="form-select">
+<select class="form-select" v-model="sortBy">
   <option value="name">Name</option>
   <option value="year">Year</option>
   <option value="rating">Rating</option>
 </select>  
   </div>
   <div class="col-md-1">
-  <button class="btn btn-outline-warning">Reset</button>
+  <button class="btn btn-outline-warning" @click="filmsStore.resetParams()">Reset</button>
   </div>
 </div>
 <!-- list films -->
@@ -59,15 +73,23 @@ filmsStore.fetchFilms();
 <nav class="mt-3 d-flex justify-content-center" aria-label="Page navigation example">
   <ul class="pagination">
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Previous">
+      <a class="page-link"
+      @click.prevent="filmsStore.addPageToParams(filmsStore.page - 1)" 
+       href="#" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"
+    v-for="i in Math.ceil(filmsStore.total/filmsStore.size)"
+    ><a class="page-link" 
+    @click.prevent="filmsStore.addPageToParams(i)" 
+    :class="{'active' : i == filmsStore.page}" 
+    href="#">{{ i }}</a></li>
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Next">
+      <a 
+      @click.prevent="filmsStore.addPageToParams(filmsStore.page + 1)"
+      :class="{'disabled': Math.ceil(filmsStore.total/filmsStore.size) == filmsStore.page}"
+      class="page-link" href="#" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
