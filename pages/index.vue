@@ -65,7 +65,7 @@ filmsStore.fetchFilms();
         </template>
       </div>
       <div class="card-footer text-end">
-        <button class="btn btn-outline-info">View</button>
+        <button @click="$router.push('/film/' + film.id)" class="btn btn-outline-info">View</button>
       </div>
     </div>
   </div>

@@ -21,6 +21,14 @@ export const useAuthStore = defineStore('auth', () => {
       throw new Error(e.response.data.message);
     }
   }
+  async function signOut() {
+    await api.post('/auth/signout', null, {
+      headers: {
+        'Authorization': 'Bearer ' + authData.value.token,
+      }
+    });
+    removeAuthData();
+  }
   
 
   function saveAuthData(data:object) {
@@ -43,5 +51,6 @@ export const useAuthStore = defineStore('auth', () => {
     authData,
     signIn,
     signUp,
+    signOut,
   }
 });
