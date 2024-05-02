@@ -13,6 +13,7 @@
         <button @click="$router.push('/signup')" class="btn btn-outline-primary" type="button">Sign up</button>
      </div>
      <div v-else>
+     <a href="#" class="pe-2" @click.prevent="$router.push('/profile')">{{ authStore.authData.fio }}</a>
       <button @click="authStore.signOut(), $router.push('/')" class="btn btn-outline-danger me-2" type="button">Sign out</button>
      </div>
     </div>
